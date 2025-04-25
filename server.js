@@ -14,6 +14,9 @@ app.use(cors({
 
 app.use(express.json());
 
+console.log('KEY_ID:', process.env.KEY_ID);   // Should print your Key ID (never print secret)
+console.log('KEY_SECRET:', process.env.KEY_SECRET); // Never print your secret, just verify in backend code.
+
 const razorpay = new Razorpay({
   key_id: process.env.KEY_ID,
   key_secret: process.env.KEY_SECRET
