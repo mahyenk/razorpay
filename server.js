@@ -7,7 +7,7 @@ const app = express();
 
 // ✅ CORS Middleware — allow your frontend origin
 app.use(cors({
-  origin: ['http://127.0.0.1:5500', 'http://localhost:5500'], // adjust as needed
+  origin: ['http://127.0.0.1', 'http://localhost:5500'], // adjust as needed
   methods: ['GET', 'POST'],
   credentials: true
 }));
