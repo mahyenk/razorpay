@@ -22,12 +22,14 @@ const razorpay = new Razorpay({
   key_secret: process.env.KEY_SECRET
 });
 
+
+// Create Order Endpoint
 app.post('/create-order', async (req, res) => {
-  const { amount } = req.body;
+  const { amount } = req.body;  // Amount in rupees
 
   try {
     const order = await razorpay.orders.create({
-      amount: amount * 100,
+      amount: amount * 100, // Amount in paise (₹100 = 10000 paise)
       currency: 'INR',
       receipt: 'receipt_' + Date.now(),
     });
@@ -39,5 +41,27 @@ app.post('/create-order', async (req, res) => {
   }
 });
 
+// Magic Checkout Preferences (Optional)
+app.post('/create-magic-checkout', async (req, res) => {
+  const { orderId } = req.body;
+
+  try {
+    const response = await razorpay.orders.fetch(orderId); // Fetch order details
+
+    // Send the order details or preferences for magic checkout
+    res.json({
+      key_id: process.env.KEY_ID,
+      order_id: response.id,
+      amount: response.amount,
+      currency: response.currency,
+      qr_required: true, // You can customize this based on your needs
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error creating Magic Checkout preferences');
+  }
+});
+
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on ${PORT}`));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
